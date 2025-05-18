@@ -5,10 +5,13 @@
 using namespace std;
 
 
-ostream& operator<<(ostream& os, const Medium& m) {
-    m->Anzeigen();
+ostream& operator<<(ostream& os, Medium& m) {
+    m.Anzeigen();
     return os;
 }
+
+// id zaehler for medium    
+// id zaehler for benutzer
 
 int main(){
     
