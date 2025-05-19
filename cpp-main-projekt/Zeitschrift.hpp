@@ -22,13 +22,8 @@ class Zeitschrift: public Medium {
             cout << "Verfuegbar: " << (GetVerfuegbar() ? "Ja" : "Nein") << endl;
             cout << "Ausgaabe Nummer: " << ausgaabe_nummer << endl;
 
-            if (GetAusleihdatum().tag != 0) {
-                cout << "Ausleihdatum: " << GetAusleihdatum().tag << "." << GetAusleihdatum().monat << "." << GetAusleihdatum().jahr << endl;
-            }
-
-            if (GetRueckgabedatum().tag != 0) {
-                cout << "Rueckgabedatum: " << GetRueckgabedatum().tag << "." << GetRueckgabedatum().monat << "." << GetRueckgabedatum().jahr << endl;
-            }
+            ShowAusleihdatum();
+            ShowRueckgabedatum();
         }
 
         short Type() override final {
