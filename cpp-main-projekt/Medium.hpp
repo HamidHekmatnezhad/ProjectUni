@@ -1,23 +1,18 @@
 #include<string>
+#include <ctime>
 using namespace std;
-
-struct datum {
-    unsigned int tag=0;
-    unsigned int monat=0;
-    unsigned int jahr=0;
-};
 
 class Medium {
     private:
         string titel="";
         unsigned int id=0;
         bool verfuegbar=false;
-        datum ausleihdatum;
-        datum rueckgabedatum;
+        time_t ausleihdatum;
+        time_t rueckgabedatum;
 
         public:
         Medium() {}
-        Medium(string titel, unsigned int id, bool verfuegbar) { //TODO: ino niyaz nadaraim ye jorayi, chon mostaghim in init nemishe 
+        Medium(string titel, unsigned int id, bool verfuegbar) {  
             this->titel = titel;
             this->id = id;
             this->verfuegbar = verfuegbar;
@@ -52,11 +47,11 @@ class Medium {
             return verfuegbar;
         }
 
-        datum GetAusleihdatum() {
+        time_t GetAusleihdatum() { 
             return ausleihdatum;
         }
 
-        datum GetRueckgabedatum() {
+        time_t GetRueckgabedatum() { 
             return rueckgabedatum;
         }
 
@@ -72,16 +67,12 @@ class Medium {
             this->verfuegbar = verfuegbar;
         }
 
-        void SetAusleihdatum(int tag, int monat, int jahr) {
-            this->ausleihdatum.tag = tag;
-            this->ausleihdatum.monat = monat;
-            this->ausleihdatum.jahr = jahr;
+        void SetAusleihdatum() { 
+            ausleihdatum = time(NULL);
         }
 
-        void SetRueckgabedatum(int tag, int monat, int jahr) {
-            this->rueckgabedatum.tag = tag;
-            this->rueckgabedatum.monat = monat;
-            this->rueckgabedatum.jahr = jahr;
+        void SetRueckgabedatum() {
+            rueckgabedatum = time(NULL);
         }
 
 };
