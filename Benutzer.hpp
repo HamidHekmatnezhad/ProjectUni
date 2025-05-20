@@ -75,6 +75,10 @@ class Benutzer {
             return liste_ausgeliehener_bücher;
         }
 
+        int GetIndex() {
+            return index;
+        }
+
         void SetName(string name) {
             this->name = name;
         }
