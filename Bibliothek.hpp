@@ -56,94 +56,26 @@ class Bibliothek {
             return false;
         }
 
-        
-        /////////////////////////////////// Benutzer ///////////////////////////////////
-        bool BenutzerHinzufuegen(string name) { // TODO: lowercase
-            for (int i = 0; i < index_benutzer; i++) {
-                if (list_of_benutzer[i].GetName() == name) {
-                    cout << "Benutzer mit diesem Namen existiert bereits!" << endl;
-                    return false;
+        bool IsNotNumber(string eingabe) {
+            for (int i = 0; i < eingabe.size(); i++) {
+                if (!(eingabe[i] >= '0' && eingabe[i] <= '9')) {
+                    cout << "Eingabe darf nur Zahlen enthalten!" << endl;
+                    return true;
                 }
             }
-
-            if (index_benutzer >= MAX_ANZAHL_BENUTZER) {
-                cout << "Maximale Anzahl an Benutzern erreicht!" << endl;
-                return false;
-            }
-            
-            
-            if (UngueltigEingaben(name)) {
-                return false;
-            }
-            
-            list_of_benutzer[index_benutzer] = Benutzer(name, id_benutzer);
-            id_benutzer++;
-            index_benutzer++;
-            cout << "Benutzer hinzugefügt: " << name << "  mit ID: " << list_of_benutzer[index_benutzer-1].GetId() << endl;
-            return true;
-        }
-        
-        unsigned int SearchBenutzer(string name) {
-            for (int i = 0; i < index_benutzer; i++) {
-                if (list_of_benutzer[i].GetName() == name) {
-                    return i;
-                }
-            }
-            return -1;
-        } 
-        
-        void AnzeigenFuerEinBenutzer(string name){
-            int index = SearchBenutzer(name);
-            if (index == -1) {
-                cout << "Benutzer nicht gefunden!" << endl;
-            }
-            else {
-                cout << "Benutzer ID: " << list_of_benutzer[index].GetId() << endl;
-                cout << "Benutzer Name: " << list_of_benutzer[index].GetName() << endl;
-                cout << "Ausgeliehene Medien: " << endl;
-                if (list_of_benutzer[index].GetIndex() == 0) {
-                    cout << "\tKeine ausgeliehenen Medien!" << endl;
-                }
-                for (int i = 0; i < list_of_benutzer[index].GetIndex(); i++) {
-                    AnzeigenMedienMitId(list_of_benutzer[index].GetListeAusgeliehenerBuecher()[i]);
-                }
-                cout << endl;
-            }
+            return false;
         }
 
-        void AnzeigenFuerAlleBenutzer() {  
-            cout << "Alle Benutzer: " << endl;
-            for (int i = 0; i < index_benutzer; i++) {
-                cout << "\tBenutzer ID: " << list_of_benutzer[i].GetId() << endl;
-                cout << "\tBenutzer Name: " << list_of_benutzer[i].GetName() << endl;
-                cout << "\tAusgeliehene Medien: " << endl;
-                if (list_of_benutzer[i].GetIndex() == 0) {
-                    cout << "\t\tKeine ausgeliehenen Medien!" << endl;
+        string ToLowerCase(string eingabe) {
+            for (int i = 0; i < eingabe.size(); i++) {
+                if (eingabe[i] >= 'A' && eingabe[i] <= 'Z') {
+                    eingabe[i] += 32;
                 }
-                for (int j = 0; j < list_of_benutzer[i].GetIndex(); j++) {
-                    AnzeigenMedienMitId(list_of_benutzer[i].GetListeAusgeliehenerBuecher()[j]);
-                }
-                cout << endl;
             }
+            return eingabe;
         }
-        
-        void BenutzerLoeschen(string name) {
-            unsigned int temp_id = SearchBenutzer(name);
-            if (temp_id == -1) {
-                cout << "Benutzer nicht gefunden!" << endl;
-                return;
-            }
-            for (int i = temp_id; i < index_benutzer - 1; i++) {
-                list_of_benutzer[i] = list_of_benutzer[i + 1];
-            }
-            index_benutzer--;
-            cout << "Benutzer gelöscht: " << name << endl;
-        }
- 
-        ////////////////////////////////////////////////////////////////////////////////
-        
 
-        //////////////////////////////////// Medien ////////////////////////////////////
+          //////////////////////////////////// Medien ////////////////////////////////////
         void AnzeigenMedienMitId(unsigned int id) {
             cout << "+-------------------------------------------+" << endl;
             switch(id/100){
@@ -181,56 +113,148 @@ class Bibliothek {
             cout << "+-------------------------------------------+" << endl;
         }
         
-        void AnzeigenMedienAll(int type) {//ch
+        void AnzeigenAllMedien(int type) {
+            // 0 = alle, 1 = buecher, 2 = zeitschriften, 3 = dvds
             cout << "+-------------------------------------------+" << endl;            
-            switch(type) {
-                case 1:
+            if (type == 1 || type == 0) {
                     cout << "|\tBUCH:" << endl;
                     for (int i = 0; i < index_buch; i++) {
                         list_of_buecher[i].Anzeigen();
                         cout << "---------------------------------------------" << endl;
                     }
-                    break;
+                }
                 
-                case 2:
+                if (type == 2 || type == 0) {
                     cout << "|\tZEITSCHRIFT:" << endl;
                     for (int i = 0; i < index_zeitschrift; i++) {
                         list_of_zeitschriften[i].Anzeigen();
                     }
-                    break;
+                }
 
-                case 3:
+                if (type == 3 || type == 0) {
                     cout << "|\tDVD:" << endl;
                     for (int i = 0; i < index_dvd; i++) {
                         list_of_dvds[i].Anzeigen();
                     }
-                    break;
-
-                default:
-                    cout << "|\t\tUnbekannter Typ!" << endl;
-                    break;
+                }
+                cout << "+-------------------------------------------+" << endl;
             }
-            cout << "+-------------------------------------------+" << endl;
-        }
+
         ////////////////////////////////////////////////////////////////////////////////
 
 
-        ///////////////////////////////////// Buch /////////////////////////////////////
-        void HinzufuegenBuch(string title, string autor, unsigned int ISBN, bool verfuegbar) {
-            for (int i = 0; i < index_buch; i++) {
-                if (list_of_buecher[i].GetTitel() == title) {
-                    cout << "Buch mit diesem Titel existiert bereits!" << endl;
-                    return;
+        /////////////////////////////////// Benutzer ///////////////////////////////////
+        bool BenutzerHinzufuegen(string name) {
+            name = ToLowerCase(name);
+            for (int i = 0; i < index_benutzer; i++) {
+                if (list_of_benutzer[i].GetName() == name) {
+                    cout << "Benutzer mit diesem Namen existiert bereits!" << endl;
+                    return false;
                 }
             }
 
-            for (int i = 0; i < index_buch; i++) {
-                if (list_of_buecher[i].GetISBN() == ISBN) {
-                    cout << "Buch mit dieser ISBN existiert bereits!" << endl;
-                    return;
-                }
+            if (index_benutzer >= MAX_ANZAHL_BENUTZER) {
+                cout << "Maximale Anzahl an Benutzern erreicht!" << endl;
+                return false;
             }
             
+            
+            if (UngueltigEingaben(name)) {
+                return false;
+            }
+            
+            list_of_benutzer[index_benutzer] = Benutzer(name, id_benutzer);
+            id_benutzer++;
+            index_benutzer++;
+            cout << "Benutzer hinzugefügt: " << name << "  mit ID: " << list_of_benutzer[index_benutzer-1].GetId() << endl;
+            return true;
+        }
+        
+        unsigned int SearchBenutzerMitName(string name) {
+            for (int i = 0; i < index_benutzer; i++) {
+                if (list_of_benutzer[i].GetName() == name) {
+                    return i; // return index
+                }
+            }
+            return -1;
+        } 
+
+        unsigned int SearchBenutzerMitId(unsigned int id) {
+            for (int i = 0; i < index_benutzer; i++) {
+                if (list_of_benutzer[i].GetId() == id) {
+                    return i; // return index
+                }
+            }
+            return -1;
+        }
+        
+        void AnzeigenFuerEinBenutzer(string name){
+            int index = SearchBenutzerMitName(name);
+            if (index == -1) {
+                cout << "Benutzer nicht gefunden!" << endl;
+            }
+            else {
+                cout << "Benutzer ID: " << list_of_benutzer[index].GetId() << endl;
+                cout << "Benutzer Name: " << list_of_benutzer[index].GetName() << endl;
+                cout << "Ausgeliehene Medien: " << endl;
+                if (list_of_benutzer[index].GetIndex() == 0) {
+                    cout << "\tKeine ausgeliehenen Medien!" << endl;
+                }
+                for (int i = 0; i < list_of_benutzer[index].GetIndex(); i++) {
+                    AnzeigenMedienMitId(list_of_benutzer[index].GetListeAusgeliehenerBuecher()[i]);
+                }
+                cout << endl;
+            }
+        }
+
+        void AnzeigenFuerAlleBenutzer() {  
+            cout << "Alle Benutzer: " << endl;
+            for (int i = 0; i < index_benutzer; i++) {
+                cout << "\tBenutzer ID: " << list_of_benutzer[i].GetId() << endl;
+                cout << "\tBenutzer Name: " << list_of_benutzer[i].GetName() << endl;
+                cout << "\tAusgeliehene Medien: " << endl;
+                if (list_of_benutzer[i].GetIndex() == 0) {
+                    cout << "\t\tKeine ausgeliehenen Medien!" << endl;
+                }
+                for (int j = 0; j < list_of_benutzer[i].GetIndex(); j++) {
+                    AnzeigenMedienMitId(list_of_benutzer[i].GetListeAusgeliehenerBuecher()[j]);
+                }
+                cout << endl;
+            }
+        }
+        
+        void BenutzerLoeschen(string name) {
+            unsigned int temp_id = SearchBenutzerMitName(name);
+            if (temp_id == -1) {
+                cout << "Benutzer nicht gefunden!" << endl;
+                return;
+            }
+            for (int i = temp_id; i < index_benutzer - 1; i++) {
+                list_of_benutzer[i] = list_of_benutzer[i + 1];
+            }
+            index_benutzer--;
+            cout << "Benutzer gelöscht: " << name << endl;
+        }
+ 
+        unsigned int GetBenutzerIndexMitId(unsigned int id) {
+            for (int i = 0; i < index_benutzer; i++) {
+                if (list_of_benutzer[i].GetId() == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+          
+
+        ///////////////////////////////////// Buch /////////////////////////////////////
+        void HinzufuegenBuch(string title, string autor, unsigned int ISBN, bool verfuegbar) {
+            if (UngueltigEingaben(title)) {return;}
+
+            title = ToLowerCase(title);
+            autor = ToLowerCase(autor);
+
             if (index_buch >= MAX_ANZAHL_BUCH) {
                 cout << "Maximale Anzahl an Buechern erreicht!" << endl;
                 return;
@@ -255,25 +279,44 @@ class Bibliothek {
             }
         }
 
-        unsigned int SearchBuchTitle(string title) {
+        unsigned int SearchBuchMitId(unsigned int id) {
+            for (int i = 0; i < index_buch; i++) {
+                if (list_of_buecher[i].GetId() == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        void SearchBuchTitleAnzeigen(string title) {
+            bool temp = true;
+            cout << "+-------------------------------------------+" << endl;            
             for (int i = 0; i < index_buch; i++) {
                 if (list_of_buecher[i].GetTitel() == title) {
-                    return i;
+                    cout << "Buch gefunden: \n";
+                    list_of_buecher[i].Anzeigen();
+                    temp = false;
                 }
             }
-            return -1;
+            if (temp) {cout << "Buch nicht gefunden!" << endl;}
+            cout << "+-------------------------------------------+" << endl;            
         }
 
-        unsigned int SearchBuchISBN(unsigned int ISBN) {
+        void SearchBuchISBNAnzeigen(unsigned int ISBN) {
+            bool temp = true;
+            cout << "+-------------------------------------------+" << endl;
             for (int i = 0; i < index_buch; i++) {
                 if (list_of_buecher[i].GetISBN() == ISBN) {
-                    return i;
+                    cout << "Buch gefunden: \n";
+                    list_of_buecher[i].Anzeigen();
+                    temp = false;
                 }
             }
-            return -1;
+            if (temp) {cout << "Buch nicht gefunden!" << endl;}
+            cout << "+-------------------------------------------+" << endl;
         }
 
-        void SearchBuchAutherAndShow(string autor) { // 
+        void SearchBuchAutherAnzeigen(string autor) { 
             bool temp = true;
             cout << "+-------------------------------------------+" << endl;            
             for (int i = 0; i < index_buch; i++) {
@@ -282,9 +325,7 @@ class Bibliothek {
                     temp = false;
                 }
             }
-            if (temp) {
-                cout << "Buch nicht gefunden!" << endl;
-            }   
+            if (temp) {cout << "Buch nicht gefunden!" << endl;}   
             cout << "+-------------------------------------------+" << endl;            
         }
         
@@ -305,12 +346,8 @@ class Bibliothek {
 
         ////////////////////////////////// Zeitschrift //////////////////////////////////
         void HinzufuegenZeitschrift(string title, unsigned int ausgaabe_nummer, bool verfuegbar) {
-            for (int i = 0; i < index_zeitschrift; i++) {
-                if (list_of_zeitschriften[i].GetTitel() == title) {
-                    cout << "Zeitschrift mit diesem Titel existiert bereits!" << endl;
-                    return;
-                }
-            }
+            title = ToLowerCase(title);
+            if (UngueltigEingaben(title)) {return;}
 
             if (index_zeitschrift >= MAX_ANZAHL_ZEIT) {
                 cout << "Maximale Anzahl an Zeitschriften erreicht!" << endl;
@@ -336,22 +373,39 @@ class Bibliothek {
             }
         }
 
-        unsigned int SearchZeitschriftTitle(string title) {
+        unsigned int SearchZeitschriftMitId(unsigned int id) {
             for (int i = 0; i < index_zeitschrift; i++) {
-                if (list_of_zeitschriften[i].GetTitel() == title) {
+                if (list_of_zeitschriften[i].GetId() == id) {
                     return i;
                 }
             }
             return -1;
         }
 
-        unsigned int SearchZeitschriftAusgaabeNummer(unsigned int ausgaabe_nummer) {
+        void SearchZeitschriftTitleAnzeigen(string title) {
+            bool temp = true;
+            cout << "+-------------------------------------------+" << endl;
             for (int i = 0; i < index_zeitschrift; i++) {
-                if (list_of_zeitschriften[i].GetAusgaabeNummer() == ausgaabe_nummer) {
-                    return i;
+                if (list_of_zeitschriften[i].GetTitel() == title) {
+                    list_of_zeitschriften[i].Anzeigen();
+                    temp = false;
                 }
             }
-            return -1;
+            if (temp) {cout << "Zeitschrift nicht gefunden!" << endl;}
+            cout << "+-------------------------------------------+" << endl;
+        }
+
+        void SearchZeitschriftAusgaabeNummerAnzeigen(unsigned int ausgaabe_nummer) {
+            bool temp = true;
+            cout << "+-------------------------------------------+" << endl;
+            for (int i = 0; i < index_zeitschrift; i++) {
+                if (list_of_zeitschriften[i].GetAusgaabeNummer() == ausgaabe_nummer) {
+                    list_of_zeitschriften[i].Anzeigen();
+                    temp = false;
+                }
+            }
+            if (temp) {cout << "Zeitschrift nicht gefunden!" << endl;}
+            cout << "+-------------------------------------------+" << endl;
         }
         
         void LoschenZeitschrift(unsigned int index) {
@@ -366,11 +420,20 @@ class Bibliothek {
             cout << "Zeitschrift gelöscht! " << endl;
         }
 
+        unsigned int GetZeitschriftIndexMitId(unsigned int id) {
+            for (int i = 0; i < index_zeitschrift; i++) {
+                if (list_of_zeitschriften[i].GetId() == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
         /////////////////////////////////////////////////////////////////////////////////
 
 
         ///////////////////////////////////// DVD ///////////////////////////////////////
         void HinzufuegenDVD(string title, unsigned int stunde, unsigned int minute, unsigned int sekunde, bool verfuegbar) {
+            title = ToLowerCase(title);
             for (int i = 0; i < index_dvd; i++) {
                 if (list_of_dvds[i].GetTitel() == title) {
                     cout << "DVD mit diesem Titel existiert bereits!" << endl;
@@ -403,13 +466,26 @@ class Bibliothek {
             }
         }
 
-        unsigned int SearchDVDTitle(string title) {
+        unsigned int SearchDVDMitId(unsigned int id) {
             for (int i = 0; i < index_dvd; i++) {
-                if (list_of_dvds[i].GetTitel() == title) {
+                if (list_of_dvds[i].GetId() == id) {
                     return i;
                 }
             }
             return -1;
+        }
+
+        void SearchDVDTitleAnzeigen(string title) {
+            bool temp = true;
+            cout << "+-------------------------------------------+" << endl;
+            for (int i = 0; i < index_dvd; i++) {
+                if (list_of_dvds[i].GetTitel() == title) {
+                    list_of_dvds[i].Anzeigen();
+                    temp = false;
+                }
+            }
+            if (temp) {cout << "DVD nicht gefunden!" << endl;}
+            cout << "+-------------------------------------------+" << endl;
         }
 
         void LoschenDVD(unsigned int index) {
@@ -424,22 +500,234 @@ class Bibliothek {
             cout << "DVD gelöscht! " << endl;
         }
 
+        unsigned int GetDVDIndexMitId(unsigned int id) {
+            for (int i = 0; i < index_dvd; i++) {
+                if (list_of_dvds[i].GetId() == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
         ///////////////////////////////////////////////////////////////////////////////// 
         
-        // TODO: name und datum anzeigen
+
+        /////////////////////////////// Ausleihen system /////////////////////////////////
+        void Ausleihen(unsigned int benutzer_id, unsigned int mediun_id, unsigned int ausleihdauer, int tag=0, int monat=0, int jahr=0) {
+
+            // Check exist in ausgeliehen List
+            for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                if (list_of_ausgeliehene_medien[i][1] == mediun_id) {
+                    cout << "Medium mit ID " << mediun_id << " ist bereits ausgeliehen!" << endl;
+                    return;
+                }
+            }
+            
+            int index_benutzer = GetBenutzerIndexMitId(benutzer_id);
+            if (index_benutzer == -1) {
+                cout << "Benutzer mit ID " << benutzer_id << " nicht gefunden!" << endl;
+                return;
+            }
+
+            int index_temp = 0;
+            switch (mediun_id/100) {
+            case 1:
+                index_temp = SearchBuchMitId(mediun_id);
+                if (index_temp == -1) {
+                    cout << "Buch mit ID " << mediun_id << " nicht gefunden!" << endl;
+                    return;
+                }
+                if (!list_of_buecher[index_temp].GetVerfuegbar()){
+                    cout << "Buch mit ID " << mediun_id << " ist nicht verfügbar!" << endl;
+                    return;
+                }
+                
+                list_of_buecher[index_temp].SetVerfuegbar(false);
+                if (tag == 0){list_of_buecher[index_temp].SetAusleihdatum();} // default, set to now
+                else {list_of_buecher[index_temp].SetAusleihdatum(jahr, monat, tag);}// set to custom date
+                list_of_buecher[index_temp].SetRueckgabedatum(ausleihdauer);
+
+                break;
+
+            case 2:
+                index_temp = GetZeitschriftIndexMitId(mediun_id);
+                if (index_temp == -1) {
+                    cout << "Zeitschrift mit ID " << mediun_id << " nicht gefunden!" << endl;
+                    return;
+                }
+                if (!list_of_zeitschriften[index_temp].GetVerfuegbar()){
+                    cout << "Zeitschrift mit ID " << mediun_id << " ist nicht verfügbar!" << endl;
+                    return;
+                }
+
+                list_of_zeitschriften[index_temp].SetVerfuegbar(false);
+                if (tag == 0){list_of_zeitschriften[index_temp].SetAusleihdatum();}
+                else {list_of_zeitschriften[index_temp].SetAusleihdatum(jahr, monat, tag);}
+                list_of_zeitschriften[index_temp].SetRueckgabedatum(ausleihdauer);
+
+                break;
+
+            case 3:
+                index_temp = GetDVDIndexMitId(mediun_id);
+                if (index_temp == -1) {
+                    cout << "DVD mit ID " << mediun_id << " nicht gefunden!" << endl;
+                    return;
+                }
+                if (!list_of_dvds[index_temp].GetVerfuegbar()){
+                    cout << "DVD mit ID " << mediun_id << " ist nicht verfügbar!" << endl;
+                    return;
+                }
+
+                list_of_dvds[index_temp].SetVerfuegbar(false);
+                if (tag == 0){list_of_dvds[index_temp].SetAusleihdatum();}
+                else {list_of_dvds[index_temp].SetAusleihdatum(jahr, monat, tag);}
+                list_of_dvds[index_temp].SetRueckgabedatum(ausleihdauer);
+
+                break;
+            
+            default:
+                cout << "Unbekannter Typ oder nicht gefunden!" << endl;
+                return;
+                break;
+            }
+
+            list_of_ausgeliehene_medien[index_ausgeliehene_medien][0] = benutzer_id;
+            list_of_ausgeliehene_medien[index_ausgeliehene_medien][1] = mediun_id;
+            index_ausgeliehene_medien++;
+            cout << "Benutzer mit ID " << benutzer_id << "Medium mit ID " << mediun_id << " erfolgreich ausgeliehen!" << endl;
+
+        }
+
+        void Zurueckgeben(unsigned int benutzer_id, unsigned int mediun_id) {
+            int index_benutzer = GetBenutzerIndexMitId(benutzer_id);
+            if (index_benutzer == -1) {
+                cout << "Benutzer mit ID " << benutzer_id << " nicht gefunden!" << endl;
+                return;
+            }
+
+            int index_temp = 0;
+            switch (mediun_id/100) {
+            case 1:
+                index_temp = SearchBuchMitId(mediun_id);
+                if (index_temp == -1) {
+                    cout << "Buch mit ID " << mediun_id << " nicht gefunden!" << endl;
+                    return;
+                }
+                list_of_buecher[index_temp].SetVerfuegbar(true);
+                list_of_buecher[index_temp].ResetAusleihdatum();
+                list_of_buecher[index_temp].ResetRueckgabedatum();
+
+                break;
+
+            case 2:
+                index_temp = GetZeitschriftIndexMitId(mediun_id);
+                if (index_temp == -1) {
+                    cout << "Zeitschrift mit ID " << mediun_id << " nicht gefunden!" << endl;
+                    return;
+                }
+                list_of_zeitschriften[index_temp].SetVerfuegbar(true);
+                list_of_zeitschriften[index_temp].ResetAusleihdatum();
+                list_of_zeitschriften[index_temp].ResetRueckgabedatum();
+
+                break;
+
+            case 3:
+                index_temp = GetDVDIndexMitId(mediun_id);
+                if (index_temp == -1) {
+                    cout << "DVD mit ID " << mediun_id << " nicht gefunden!" << endl;
+                    return;
+                }
+                list_of_dvds[index_temp].SetVerfuegbar(true);
+                list_of_dvds[index_temp].ResetAusleihdatum();
+                list_of_dvds[index_temp].ResetRueckgabedatum();
+
+                break;
+
+            default:
+                cout << "Unbekannter Typ oder nicht gefunden!" << endl;
+                return;
+                break;
+            }
+            for (int i = index_temp; i < index_ausgeliehene_medien - 1; i++) {
+                    list_of_ausgeliehene_medien[i][0] = list_of_ausgeliehene_medien[i + 1][0];
+                    list_of_ausgeliehene_medien[i][1] = list_of_ausgeliehene_medien[i + 1][1];
+                }
+                index_ausgeliehene_medien--;
+            }
+
+        void AnzeigenAusgelieheneMedien(int type) {
+            // 0 = alle, 1 = buecher, 2 = zeitschriften, 3 = dvds
+            cout << "+-------------------------------------------+" << endl;
+            cout << "Ausgeliehene Medien: " << endl;
+            if (type == 1 || type == 0) {
+                cout << "\tBuecher: " << endl;
+                for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                    if (list_of_ausgeliehene_medien[i][1]/100 == 1) {
+                        list_of_buecher[i].Anzeigen();
+                        cout << "---------------------------------------------" << endl;
+                    }
+                }
+            }
+
+            if (type == 2 || type == 0) {
+                cout << "\tZeitschriften: " << endl;
+                for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                    if (list_of_ausgeliehene_medien[i][1]/100 == 2) {
+                        list_of_zeitschriften[i].Anzeigen();
+                        cout << "---------------------------------------------" << endl;
+                    }
+                }
+            }
+
+            if (type == 3 || type == 0) {
+                cout << "\tDVDs: " << endl;
+                for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                    if (list_of_ausgeliehene_medien[i][1]/100 == 3) {
+                        list_of_dvds[i].Anzeigen();
+                        cout << "---------------------------------------------" << endl;
+                    }
+                }
+            }
+        }
         
+        void AnzeigenUeberfaelligeMedien(int type) {
+            // 0 = alle, 1 = buecher, 2 = zeitschriften, 3 = dvds
+            cout << "+-------------------------------------------+" << endl;
+            cout << "Ueberfaellige Medien: " << endl;
+            if (type == 1 || type == 0) {
+                cout << "\tBuecher: " << endl;
+                for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                    if (list_of_ausgeliehene_medien[i][1]/100 == 1) {
+                        if(list_of_buecher[i].IsUeberfaellig()) {
+                            list_of_buecher[i].Anzeigen();
+                            cout << "---------------------------------------------" << endl;
+                        }
+                    }
+                }
+            }
 
-        // TODO: list of ausgeliehene medien anzeigen, add to list of ausgeliehene medien
-        // TODO: ausleihen und zurückgeben , manage lisst of ausgeliehene medien
-        // TODO: benutzer und medien suchen
-        // TODO: alle medien anzeigen
-        // TODO: alle benutzer anzeigen
-        // TODO: alle ausgeliehenen medien nicht zurückgegeben anzeigen
-        
-        
+            if (type == 2 || type == 0) {
+                cout << "\tZeitschriften: " << endl;
+                for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                    if (list_of_ausgeliehene_medien[i][1]/100 == 2) {
+                        if (list_of_zeitschriften[i].IsUeberfaellig()) {
+                            list_of_zeitschriften[i].Anzeigen();
+                            cout << "---------------------------------------------" << endl;
+                        }
+                    }
+                }
+            }
 
-        // TODO: load data from file
-
-
-
+            if (type == 3 || type == 0) {
+                cout << "\tDVDs: " << endl;
+                for (int i = 0; i < index_ausgeliehene_medien; i++) {
+                    if (list_of_ausgeliehene_medien[i][1]/100 == 3) {
+                        if (list_of_dvds[i].IsUeberfaellig()) {
+                            list_of_dvds[i].Anzeigen();
+                            cout << "---------------------------------------------" << endl;
+                        }
+                    }
+                }
+            }
+        } 
+        //////////////////////////////////////////////////////////////////////////////////
 };

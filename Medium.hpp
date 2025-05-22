@@ -93,11 +93,6 @@ class Medium {
             first_ausleihdatum = true;
         }
 
-        void SetRueckgabedatum() {
-            rueckgabedatum = time(NULL);
-            first_rueckgabedatum = true;
-        }
-
         void SetAusleihdatum(int jahr, int monat, int tag, int stunde=0, int minute=0, int sekunde=0) {
             tm datetime_a;
 
@@ -111,16 +106,30 @@ class Medium {
             ausleihdatum = mktime(&datetime_a);
         }
         
-        void SetRueckgabedatum(int jahr, int monat, int tag, int stunde=0, int minute=0, int sekunde=0) {
-            tm datetime_r;
+        void SetRueckgabedatum(unsigned int tage) {
+            tm *datetime_r = localtime(&ausleihdatum);
+            datetime_r->tm_mday += tage;
 
-            datetime_r.tm_year = jahr - 1900; 
-            datetime_r.tm_mon = monat - 1;
-            datetime_r.tm_mday = tag;
-            datetime_r.tm_hour = stunde;
-            datetime_r.tm_min = minute;
-            datetime_r.tm_sec = sekunde;
-
-            rueckgabedatum = mktime(&datetime_r);
+            rueckgabedatum = mktime(datetime_r);
+            first_rueckgabedatum = true;
         }
-};
+
+        void ResetAusleihdatum() {
+            first_ausleihdatum = false;
+        }
+        
+        void ResetRueckgabedatum() {
+            first_rueckgabedatum = false;
+        }
+
+        bool IsUeberfaellig() {
+            if (first_rueckgabedatum) {
+                time_t now = time(NULL);
+                if (now > rueckgabedatum) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    };
