@@ -188,8 +188,8 @@ class Bibliothek {
             return -1;
         }
         
-        void AnzeigenFuerEinBenutzer(string name){
-            int index = SearchBenutzerMitName(name);
+        void AnzeigenFuerEinBenutzer(unsigned int id){
+            int index = SearchBuchMitId(id);
             if (index == -1) {
                 cout << "Benutzer nicht gefunden!" << endl;
             }
@@ -199,7 +199,9 @@ class Bibliothek {
                 cout << "Ausgeliehene Medien: " << endl;
                 if (list_of_benutzer[index].GetIndex() == 0) {
                     cout << "\tKeine ausgeliehenen Medien!" << endl;
+                    return;
                 }
+                cout << "\tAusgeliehene Medien: " << endl;
                 for (int i = 0; i < list_of_benutzer[index].GetIndex(); i++) {
                     AnzeigenMedienMitId(list_of_benutzer[index].GetListeAusgeliehenerBuecher()[i]);
                 }
@@ -215,7 +217,10 @@ class Bibliothek {
                 cout << "\tAusgeliehene Medien: " << endl;
                 if (list_of_benutzer[i].GetIndex() == 0) {
                     cout << "\t\tKeine ausgeliehenen Medien!" << endl;
+                    return;
                 }
+                cout << "\tAusgeliehene Medien: " << endl;
+
                 for (int j = 0; j < list_of_benutzer[i].GetIndex(); j++) {
                     AnzeigenMedienMitId(list_of_benutzer[i].GetListeAusgeliehenerBuecher()[j]);
                 }
@@ -223,17 +228,17 @@ class Bibliothek {
             }
         }
         
-        void BenutzerLoeschen(string name) {
-            unsigned int temp_id = SearchBenutzerMitName(name);
-            if (temp_id == -1) {
+        void BenutzerLoeschen(unsigned int id) {
+            unsigned int temp_idx = SearchBuchMitId(id);
+            if (temp_idx == -1) {
                 cout << "Benutzer nicht gefunden!" << endl;
                 return;
             }
-            for (int i = temp_id; i < index_benutzer - 1; i++) {
+            for (int i = temp_idx; i < index_benutzer - 1; i++) {
                 list_of_benutzer[i] = list_of_benutzer[i + 1];
             }
             index_benutzer--;
-            cout << "Benutzer gelöscht: " << name << endl;
+            cout << "Benutzer gelöscht: " << id << endl;
         }
  
         unsigned int GetBenutzerIndexMitId(unsigned int id) {

@@ -1,5 +1,4 @@
 #include <Medium.hpp>
-#include <iostream>
 using namespace std;
 
 class Buch: public Medium {
