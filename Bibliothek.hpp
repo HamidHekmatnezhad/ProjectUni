@@ -40,16 +40,15 @@ class Bibliothek {
 
     public:
         Bibliothek() {}
-        ~Bibliothek() {
-            cout << "Bibliothek destructor called" << endl;
-        }
+        ~Bibliothek() {}
 
         bool UngueltigEingaben(string eingabe) {
             for (int i = 0; i < eingabe.size(); i++) {
                 int ascii = eingabe[i];
                 if (!((ascii >= 48 && ascii <= 57) ||     // 0-9
                         (ascii >= 65 && ascii <= 90) ||     // A-Z
-                        (ascii >= 97 && ascii <= 122))) {   // a-z
+                        (ascii >= 97 && ascii <= 122) || // a-z
+                        (ascii == 32))) {  // space
                         cout << "Eingabe darf nur Buchstaben oder Zahlen enthalten!" << endl;
                         return true;
                 }
@@ -143,7 +142,7 @@ class Bibliothek {
             // 0 = alle, 1 = buecher, 2 = zeitschriften, 3 = dvds
             cout << "+-------------------------------------------+" << endl;            
             if (type == 1 || type == 0) {
-                    cout << "|\tBUCH:" << endl;
+                    cout << "------------+  BUCH  +------------" << endl;
                     for (int i = 0; i < index_buch; i++) {
                         list_of_buecher[i].Anzeigen();
                         cout << "---------------------------------------------" << endl;
@@ -151,16 +150,18 @@ class Bibliothek {
                 }
                 
                 if (type == 2 || type == 0) {
-                    cout << "|\tZEITSCHRIFT:" << endl;
+                cout << "------------+  ZEITSCHRIFT  +------------" << endl;
                     for (int i = 0; i < index_zeitschrift; i++) {
                         list_of_zeitschriften[i].Anzeigen();
+                        cout << "---------------------------------------------" << endl;
                     }
                 }
 
                 if (type == 3 || type == 0) {
-                    cout << "|\tDVD:" << endl;
+                cout << "------------+  DVD  +------------" << endl;
                     for (int i = 0; i < index_dvd; i++) {
                         list_of_dvds[i].Anzeigen();
+                        cout << "---------------------------------------------" << endl;
                     }
                 }
                 cout << "+-------------------------------------------+" << endl;
@@ -551,18 +552,16 @@ class Bibliothek {
 
         /////////////////////////////// Ausleihen system /////////////////////////////////
         void Ausleihen(unsigned int benutzer_id, unsigned int mediun_id, unsigned int ausleihdauer, int tag=0, int monat=0, int jahr=0) {
-
-            // Check exist in ausgeliehen List
-            for (int i = 0; i < index_ausgeliehene_medien; i++) {
-                if (list_of_ausgeliehene_medien[i][1] == mediun_id) {
-                    cout << "Medium mit ID " << mediun_id << " ist bereits ausgeliehen!" << endl;
-                    return;
-                }
-            }
+            
             
             int index_benutzer = GetBenutzerIndexMitId(benutzer_id);
             if (index_benutzer == -1) {
                 cout << "Benutzer mit ID " << benutzer_id << " nicht gefunden!" << endl;
+                return;
+            }
+            
+            if (!(list_of_benutzer[index_benutzer].GetIndex() < list_of_benutzer[index_benutzer].GetMaxAusleihungen())) {
+                cout << "Maximale Anzahl an ausgeliehenen Medien erreicht! fuer Benutzer mit ID " << benutzer_id << endl;
                 return;
             }
 
@@ -578,7 +577,7 @@ class Bibliothek {
                     cout << "Buch mit ID " << mediun_id << " ist nicht verfügbar!" << endl;
                     return;
                 }
-                
+
                 list_of_buecher[index_temp].SetVerfuegbar(false);
                 if (tag == 0){list_of_buecher[index_temp].SetAusleihdatum();} // default, set to now
                 else {list_of_buecher[index_temp].SetAusleihdatum(jahr, monat, tag);}// set to custom date
@@ -640,7 +639,8 @@ class Bibliothek {
             list_of_ausgeliehene_medien[index_ausgeliehene_medien][0] = benutzer_id;
             list_of_ausgeliehene_medien[index_ausgeliehene_medien][1] = mediun_id;
             index_ausgeliehene_medien++;
-            cout << "Benutzer mit ID " << benutzer_id << "Medium mit ID " << mediun_id << " erfolgreich ausgeliehen!" << endl;
+            list_of_benutzer[index_benutzer].Ausleihen(mediun_id);
+            cout << "Benutzer mit ID " << benutzer_id << " Medium mit ID " << mediun_id << " erfolgreich ausgeliehen!" << endl;
 
         }
 
@@ -694,11 +694,13 @@ class Bibliothek {
                 return;
                 break;
             }
+            
             for (int i = index_temp; i < index_ausgeliehene_medien - 1; i++) {
                     list_of_ausgeliehene_medien[i][0] = list_of_ausgeliehene_medien[i + 1][0];
                     list_of_ausgeliehene_medien[i][1] = list_of_ausgeliehene_medien[i + 1][1];
                 }
                 index_ausgeliehene_medien--;
+                list_of_benutzer[index_benutzer].Zurueckgeben(mediun_id);
             }
 
         void AnzeigenAusgelieheneMedien(int type) {
@@ -706,9 +708,10 @@ class Bibliothek {
             cout << "+-------------------------------------------+" << endl;
             cout << "Ausgeliehene Medien: " << endl;
             if (type == 1 || type == 0) {
-                cout << "\tBuecher: " << endl;
+                cout << "------------+  Buecher  +------------" << endl;
                 for (int i = 0; i < index_ausgeliehene_medien; i++) {
                     if (list_of_ausgeliehene_medien[i][1]/100 == 1) {
+                        cout << "Benutzer ID: " << list_of_ausgeliehene_medien[i][0] << endl;
                         list_of_buecher[i].Anzeigen();
                         cout << "---------------------------------------------" << endl;
                     }
@@ -716,9 +719,10 @@ class Bibliothek {
             }
 
             if (type == 2 || type == 0) {
-                cout << "\tZeitschriften: " << endl;
+                cout << "------------+  Zeitschriften  +------------" << endl;
                 for (int i = 0; i < index_ausgeliehene_medien; i++) {
                     if (list_of_ausgeliehene_medien[i][1]/100 == 2) {
+                        cout << "Benutzer ID: " << list_of_ausgeliehene_medien[i][0] << endl;
                         list_of_zeitschriften[i].Anzeigen();
                         cout << "---------------------------------------------" << endl;
                     }
@@ -726,14 +730,16 @@ class Bibliothek {
             }
 
             if (type == 3 || type == 0) {
-                cout << "\tDVDs: " << endl;
+                cout << "------------+  DVDs  +------------" << endl;
                 for (int i = 0; i < index_ausgeliehene_medien; i++) {
                     if (list_of_ausgeliehene_medien[i][1]/100 == 3) {
+                        cout << "Benutzer ID: " << list_of_ausgeliehene_medien[i][0] << endl;
                         list_of_dvds[i].Anzeigen();
                         cout << "---------------------------------------------" << endl;
                     }
                 }
             }
+        cout << "+-------------------------------------------+" << endl;
         }
         
         void AnzeigenUeberfaelligeMedien(int type) {
@@ -741,10 +747,11 @@ class Bibliothek {
             cout << "+-------------------------------------------+" << endl;
             cout << "Ueberfaellige Medien: " << endl;
             if (type == 1 || type == 0) {
-                cout << "\tBuecher: " << endl;
+                cout << "------------+  Buecher  +------------" << endl;
                 for (int i = 0; i < index_ausgeliehene_medien; i++) {
                     if (list_of_ausgeliehene_medien[i][1]/100 == 1) {
                         if(list_of_buecher[i].IsUeberfaellig()) {
+                            cout << "Benutzer ID: " << list_of_ausgeliehene_medien[i][0] << endl;
                             list_of_buecher[i].Anzeigen();
                             cout << "---------------------------------------------" << endl;
                         }
@@ -753,10 +760,11 @@ class Bibliothek {
             }
 
             if (type == 2 || type == 0) {
-                cout << "\tZeitschriften: " << endl;
+                cout << "------------+  Zeitschriften  +------------" << endl;
                 for (int i = 0; i < index_ausgeliehene_medien; i++) {
                     if (list_of_ausgeliehene_medien[i][1]/100 == 2) {
                         if (list_of_zeitschriften[i].IsUeberfaellig()) {
+                            cout << "Benutzer ID: " << list_of_ausgeliehene_medien[i][0] << endl;
                             list_of_zeitschriften[i].Anzeigen();
                             cout << "---------------------------------------------" << endl;
                         }
@@ -765,16 +773,19 @@ class Bibliothek {
             }
 
             if (type == 3 || type == 0) {
-                cout << "\tDVDs: " << endl;
+                cout << "------------+  DVDs  +------------" << endl;
                 for (int i = 0; i < index_ausgeliehene_medien; i++) {
                     if (list_of_ausgeliehene_medien[i][1]/100 == 3) {
                         if (list_of_dvds[i].IsUeberfaellig()) {
+                            cout << "Benutzer ID: " << list_of_ausgeliehene_medien[i][0] << endl;
                             list_of_dvds[i].Anzeigen();
                             cout << "---------------------------------------------" << endl;
                         }
                     }
                 }
             }
+        cout << "+-------------------------------------------+" << endl;
         } 
+        
         //////////////////////////////////////////////////////////////////////////////////
 };

@@ -4,17 +4,19 @@ using namespace std;
 
 int main(){
     Bibliothek b;
-    int eingabe;
+    int eingabe=1;
     unsigned int id, idx, ISBN, ausgabenummer, id_medium;
     string name, titel, autor;
     unsigned int jahr, monat, tag, ausleihdauer;
     unsigned int stunde, minute, sekunde;
 
-    while(1){
+    while(true){
         cout << "1. Benutzer" << endl;
         cout << "2. Medien" << endl;
         cout << "3. Ausleihen" << endl;
         cout << "4. Zurueckgeben" << endl;
+        cout << "5. Ausgeliehene Medien anzeigen" << endl;
+        cout << "6. ausgeliehene ueberfaellige Medien" << endl;
         cout << "0. Beenden" << endl;
         
         cout << "Bitte waehlen Sie eine Option: ";
@@ -37,7 +39,8 @@ int main(){
                 switch(eingabe){
                     case 1: // neuer Benutzer
                         cout << "geben Sie den Namen ein: ";
-                        cin >> name;
+                        cin.ignore();
+                        getline(cin, name);
                         b.BenutzerHinzufuegen(name);
                         cout << endl;
                         break;
@@ -68,7 +71,8 @@ int main(){
 
                             case 2: // mit Name 
                                 cout << "geben Sie den Namen des Benutzers ein: ";
-                                cin >> name;
+                                cin.ignore();
+                                getline(cin, name);
                                 name = b.ToLowerCase(name);
                                 idx = b.SearchBenutzerMitName(name);
                                 cout << endl;
@@ -125,9 +129,11 @@ int main(){
                         switch(eingabe){
                             case 1: // Buch hinzufuegen 
                                 cout << "\ngeben Sie den Titel des Buches ein: ";
-                                cin >> titel;
+                                cin.ignore();
+                                getline(cin, titel);
                                 cout << "\ngeben Sie den Autor des Buches ein: ";
-                                cin >> autor;
+                                cin.ignore();
+                                getline(cin, autor);
                                 cout << "\ngeben Sie die ISBN des Buches ein: ";
                                 cin >> ISBN;
                                 b.HinzufuegenBuch(titel, autor, ISBN, true);
@@ -152,11 +158,13 @@ int main(){
                                 cout << "Bitte waehlen Sie eine Option: ";
                                 cin >> eingabe;
                                 cout << endl;
+                                break;
 
                                 switch(eingabe){
                                     case 1: // mit Titel 
                                         cout << "geben Sie den Titel des Buches ein: ";
-                                        cin >> titel;
+                                        cin.ignore();
+                                        getline(cin, titel);
                                         titel = b.ToLowerCase(titel);
                                         if (b.UngueltigEingaben(titel)) {break;}
                                         b.SearchBuchTitleAnzeigen(titel);
@@ -173,7 +181,8 @@ int main(){
 
                                     case 3: // mit Autor 
                                         cout << "geben Sie den Autor des Buches ein: ";
-                                        cin >> autor;
+                                        cin.ignore();
+                                        getline(cin, autor);
                                         autor = b.ToLowerCase(autor);
                                         if (b.UngueltigEingaben(autor)) {break;}
                                         b.SearchBuchAutherAnzeigen(autor);
@@ -226,7 +235,8 @@ int main(){
                     switch(eingabe){
                         case 1: // Zeitschrift hinzufuegen 
                             cout << "\ngeben Sie den Titel der Zeitschrift ein: ";
-                            cin >> titel;
+                            cin.ignore();
+                            getline(cin, titel);
                             titel = b.ToLowerCase(titel);
                             if (b.UngueltigEingaben(titel)) {break;}
                             cout << "\ngeben Sie die Ausgabenummer der Zeitschrift ein: ";
@@ -258,7 +268,8 @@ int main(){
                             switch(eingabe){
                                 case 1: // mit title 
                                     cout << "geben Sie den Titel der Zeitschrift ein: ";
-                                    cin >> titel;
+                                    cin.ignore();
+                                    getline(cin, titel);
                                     titel = b.ToLowerCase(titel);
                                     if (b.UngueltigEingaben(titel)) {break;}
                                     b.SearchZeitschriftTitleAnzeigen(titel);
@@ -318,7 +329,8 @@ int main(){
                         switch(eingabe){
                             case 1: // DVD hinzufuegen 
                                 cout << "\ngeben Sie den Titel des DVD ein: ";
-                                cin >> titel;
+                                cin.ignore();
+                                getline(cin, titel);
                                 cout << "\nBitte geben Sie die Videolänge ein (jeweils getrennt nach Stunde, Minute und Sekunde)";
                                 cout << "\nStunde: ";
                                 cin >> stunde;
@@ -358,7 +370,8 @@ int main(){
                                 switch(eingabe){
                                     case 1: // mit title 
                                         cout << "geben Sie den Titel der DVD ein: ";
-                                        cin >> titel;
+                                        cin.ignore();
+                                        getline(cin, titel);
                                         titel = b.ToLowerCase(titel);
                                         if (b.UngueltigEingaben(titel)) {break;}
                                         b.SearchDVDTitleAnzeigen(titel);
@@ -540,6 +553,88 @@ int main(){
                 b.Zurueckgeben(id, id_medium);
                 break;
 
+            case 5: // Ausgeliehene Medien anzeigen 
+                cout << "1. Buch" << endl;
+                cout << "2. Zeitschrift" << endl;
+                cout << "3. DVD" << endl;
+                cout << "4. alle Medien" << endl;
+                cout << "0. zurueck" << endl;
+                cout << "Bitte waehlen Sie eine Option: ";
+                cin >> eingabe;
+                cout << endl;
+
+                switch(eingabe){
+                    case 1: // Buch 
+                    b.AnzeigenAllMedien(1);
+                    cout << endl;
+                    break;
+
+                    case 2: // Zeitschrift 
+                    b.AnzeigenAllMedien(2);
+                    cout << endl;
+                    break;
+
+                    case 3: // DVD 
+                    b.AnzeigenAllMedien(3);
+                    cout << endl;
+                    break;
+
+                    case 4: // alle Medien 
+                    b.AnzeigenAllMedien(0);
+                    cout << endl;
+                    break;
+
+                    case 0: // zurueck
+                        cout << "Zurueck..." << endl;
+                        break;
+                        
+                    default:
+                        cout << "Ungueltige Eingabe!" << endl;
+                        break;   
+                }
+            break;
+
+            case 6: // Ausgeliehene ueberfaellige Medien anzeigen 
+                cout << "1. Buch" << endl;
+                cout << "2. Zeitschrift" << endl;
+                cout << "3. DVD" << endl;
+                cout << "4. alle Medien" << endl;
+                cout << "0. zurueck" << endl;
+                cout << "Bitte waehlen Sie eine Option: ";
+                cin >> eingabe;
+                cout << endl;
+
+                switch(eingabe){
+                    case 1: // Buch 
+                    b.AnzeigenUeberfaelligeMedien(1);
+                    cout << endl;
+                    break;
+
+                    case 2: // Zeitschrift 
+                    b.AnzeigenUeberfaelligeMedien(2);
+                    cout << endl;
+                    break;
+
+                    case 3: // DVD 
+                    b.AnzeigenUeberfaelligeMedien(3);
+                    cout << endl;
+                    break;
+
+                    case 4: // alle Medien 
+                    b.AnzeigenUeberfaelligeMedien(0);
+                    cout << endl;
+                    break;
+
+                    case 0: // zurueck
+                        cout << "Zurueck..." << endl;
+                        break;
+
+                    default:
+                        cout << "Ungueltige Eingabe!" << endl;
+                        break;   
+                }
+            break;
+
             case 0:
                 cout << "Programm wird beendet..." << endl;
                 return 0;
@@ -550,8 +645,8 @@ int main(){
         cout << endl;
         cout << "Druecken Sie eine Taste um fortzufahren..." << endl;
         cin.ignore();
-        cin.get();
-        system("clear");
-        system("cls");
+        // cin.get();
+        // system("cls");
+        // system("clear");
     }
 }

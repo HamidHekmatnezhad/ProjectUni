@@ -3,6 +3,8 @@
 #include <iostream>
 using namespace std;
 
+#pragma once
+
 class Medium {
     private:
         string titel="";
@@ -22,22 +24,18 @@ class Medium {
             this->verfuegbar = verfuegbar;
         }
 
-        ~Medium() {
-            cout << "Medium destructor called  id:" << id << endl;
-        }
+        ~Medium() {}
 
         virtual void Anzeigen() {}
 
-        virtual short Type() {} // fuer Buch:1 , Zeitschrift:2 , DVD:3
+        virtual short Type() = 0; // fuer Buch:1 , Zeitschrift:2 , DVD:3
 
         friend ostream& operator<<(ostream& os, const Medium& m);
 
-        bool operator==(Medium m) {
-            if (this->id == m.id) {
-                return true;
-            }
-            return false;
+        bool operator==(const Medium& m) const {
+            return this->id == m.id;
         }
+
 
         string GetTitel() {
             return titel;

@@ -13,9 +13,7 @@ class Buch: public Medium {
             this->ISBN = ISBN;
         }
 
-        ~Buch() {
-            cout << "Buch destructor called  id:" << GetId() << endl;
-        }
+        ~Buch() {}
 
         void Anzeigen() override final {
             cout << "Titel: " << GetTitel() << endl;

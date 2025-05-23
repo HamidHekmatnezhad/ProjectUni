@@ -17,9 +17,7 @@ class DVD: public Medium {
             this->Abspieldauer = Abspieldauer;
         }
 
-        ~DVD() {
-            cout << "DVD destructor called  id:" << GetId() << endl;
-        }
+        ~DVD() {}
         
         void Anzeigen() override final {
             cout << "Titel: " << GetTitel() << endl;

@@ -11,9 +11,7 @@ class Zeitschrift: public Medium {
             this->ausgaabe_nummer = ausgaabe_nummer;
         }
 
-        ~Zeitschrift() {
-            cout << "Zeitschrift destructor called  id:" << GetId() << endl;
-        }
+        ~Zeitschrift() {}
 
         void Anzeigen() override final {
             cout << "Titel: " << GetTitel() << endl;

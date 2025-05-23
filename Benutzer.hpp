@@ -17,21 +17,14 @@ class Benutzer {
             this->id = id;
         }
 
-        ~Benutzer() {
-            cout << "Benutzer destructor called  id:" << id << endl;
-        }
+        ~Benutzer() {}
 
         void Ausleihen(unsigned int medium_id) {
-            if (index >= MAX_ANZAHL) {
-                cout << "--> Maximale Anzahl an ausgeliehenen Medien erreicht!!!" << endl;
-            }
-            else {
             liste_ausgeliehener_bücher[index] = medium_id;
             index++;
-            }
         }
         
-        unsigned int Zurückgeben (unsigned int medium_id) {
+        void Zurueckgeben (unsigned int medium_id) {
             bool found = false;
             for (int i = 0; i < index; i++) {
                 if (liste_ausgeliehener_bücher[i] == medium_id) {
@@ -43,23 +36,14 @@ class Benutzer {
                     break;
                 }
             }
-
-            if (!found) {
-                cout << "Medium mit ID " << medium_id << " nicht gefunden!" << endl;
-                return 0;
-            }
-            else {
-                cout << "Medium mit ID " << medium_id << " erfolgreich zurückgegeben!" << endl;
-                return medium_id;
-            }
         }
         
-        unsigned int Anzeigen() const {
+        void Anzeigen() const {
             cout << "Benutzer ID: " << id << endl;
             cout << "Benutzer Name: " << name << endl;
-            cout << "Ausgeliehene Bücher: ";
+            cout << "Ausgeliehene Bücher: \n";
             for (int i = 0; i < index; i++) {
-                return liste_ausgeliehener_bücher[i];
+                cout << liste_ausgeliehener_bücher[i] << endl;
             }
         }
 
@@ -87,4 +71,7 @@ class Benutzer {
             this->id = id;
         }
         
+        int GetMaxAusleihungen() {
+            return MAX_ANZAHL;
+        }
 };
