@@ -1,7 +1,7 @@
-#include <Buch.hpp>
-#include <Zeitschrift.hpp>
-#include <DVD.hpp>
-#include <Benutzer.hpp>
+#include "Buch.hpp"
+#include "Zeitschrift.hpp"
+#include "DVD.hpp"
+#include "Benutzer.hpp"
 
 #define MAX_ANZAHL_BUCH 50
 #define MAX_ANZAHL_ZEIT 50
