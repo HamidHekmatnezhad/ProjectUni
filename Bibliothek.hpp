@@ -11,6 +11,11 @@
 
 using namespace std;
 
+ostream& operator<<(ostream& os, Medium& m) {
+    m.Anzeigen();
+    return os;
+}
+
 class Bibliothek {
     private:
         unsigned int index_benutzer=0;
@@ -29,6 +34,8 @@ class Bibliothek {
         unsigned int id_zeitschriften=201;
         unsigned int id_dvds=301;
         unsigned int id_benutzer=1001;
+
+        unsigned int ausleihdauer=90;
     
 
     public:
@@ -75,7 +82,23 @@ class Bibliothek {
             return eingabe;
         }
 
-          //////////////////////////////////// Medien ////////////////////////////////////
+        unsigned int GetAusleihdauer() {
+            return ausleihdauer;
+        }
+
+        bool UngueltigInputUnsignedInt(unsigned int eingabe) {
+            if (eingabe < 0) {
+                cout << "Eingabe darf nicht negativ sein!" << endl;
+                return true;
+            }
+            if (eingabe == 0) {
+                cout << "Eingabe darf digit sein!" << endl;
+                return true;
+            }
+            return false;
+        }
+
+        //////////////////////////////////// Medien ////////////////////////////////////
         void AnzeigenMedienMitId(unsigned int id) {
             cout << "+-------------------------------------------+" << endl;
             switch(id/100){
@@ -85,6 +108,7 @@ class Bibliothek {
                     for (int i = 0; i < index_buch; i++) {
                         if (list_of_buecher[i].GetId() == id) {
                             list_of_buecher[i].Anzeigen();
+                            break;
                         }
                     }
                     break;
@@ -94,6 +118,7 @@ class Bibliothek {
                     for (int i = 0; i < index_zeitschrift; i++) {
                         if (list_of_zeitschriften[i].GetId() == id) {
                             list_of_zeitschriften[i].Anzeigen();
+                            break;
                         }
                     }
                     break;
@@ -103,6 +128,7 @@ class Bibliothek {
                     for (int i = 0; i < index_dvd; i++) {
                         if (list_of_dvds[i].GetId() == id) {
                             list_of_dvds[i].Anzeigen();
+                            break;
                         }
                     }
 
@@ -144,30 +170,29 @@ class Bibliothek {
 
 
         /////////////////////////////////// Benutzer ///////////////////////////////////
-        bool BenutzerHinzufuegen(string name) {
+        void BenutzerHinzufuegen(string name) {
             name = ToLowerCase(name);
             for (int i = 0; i < index_benutzer; i++) {
                 if (list_of_benutzer[i].GetName() == name) {
                     cout << "Benutzer mit diesem Namen existiert bereits!" << endl;
-                    return false;
+                    return;
                 }
             }
 
             if (index_benutzer >= MAX_ANZAHL_BENUTZER) {
                 cout << "Maximale Anzahl an Benutzern erreicht!" << endl;
-                return false;
+                return;
             }
             
             
             if (UngueltigEingaben(name)) {
-                return false;
+                return;
             }
             
             list_of_benutzer[index_benutzer] = Benutzer(name, id_benutzer);
             id_benutzer++;
             index_benutzer++;
             cout << "Benutzer hinzugefügt: " << name << "  mit ID: " << list_of_benutzer[index_benutzer-1].GetId() << endl;
-            return true;
         }
         
         unsigned int SearchBenutzerMitName(string name) {
@@ -255,7 +280,11 @@ class Bibliothek {
 
         ///////////////////////////////////// Buch /////////////////////////////////////
         void HinzufuegenBuch(string title, string autor, unsigned int ISBN, bool verfuegbar) {
+            title = ToLowerCase(title);
+            autor = ToLowerCase(autor);            
+
             if (UngueltigEingaben(title)) {return;}
+            if (UngueltigEingaben(autor)) {return;}
 
             title = ToLowerCase(title);
             autor = ToLowerCase(autor);
@@ -334,7 +363,8 @@ class Bibliothek {
             cout << "+-------------------------------------------+" << endl;            
         }
         
-        void LoeschenBuch(unsigned int index) {
+        void LoeschenBuch(unsigned int id) {
+            unsigned int index = SearchBuchMitId(id);
             if (index == -1) {
                 cout << "Buch nicht gefunden!" << endl;
                 return;
@@ -413,7 +443,8 @@ class Bibliothek {
             cout << "+-------------------------------------------+" << endl;
         }
         
-        void LoschenZeitschrift(unsigned int index) {
+        void LoeschenZeitschrift(unsigned int id) {
+            unsigned int index = SearchZeitschriftMitId(id);
             if (index == -1) {
                 cout << "Zeitschrift nicht gefunden!" << endl;
                 return;
@@ -439,6 +470,7 @@ class Bibliothek {
         ///////////////////////////////////// DVD ///////////////////////////////////////
         void HinzufuegenDVD(string title, unsigned int stunde, unsigned int minute, unsigned int sekunde, bool verfuegbar) {
             title = ToLowerCase(title);
+            if (UngueltigEingaben(title)) {return;}
             for (int i = 0; i < index_dvd; i++) {
                 if (list_of_dvds[i].GetTitel() == title) {
                     cout << "DVD mit diesem Titel existiert bereits!" << endl;
@@ -493,7 +525,8 @@ class Bibliothek {
             cout << "+-------------------------------------------+" << endl;
         }
 
-        void LoschenDVD(unsigned int index) {
+        void LoeschenDVD(unsigned int id) {
+            unsigned int index = SearchDVDMitId(id);
             if (index == -1) {
                 cout << "DVD nicht gefunden!" << endl;
                 return;
@@ -551,6 +584,9 @@ class Bibliothek {
                 else {list_of_buecher[index_temp].SetAusleihdatum(jahr, monat, tag);}// set to custom date
                 list_of_buecher[index_temp].SetRueckgabedatum(ausleihdauer);
 
+                list_of_buecher[index_temp].ShowAusleihdatum();
+                list_of_buecher[index_temp].ShowRueckgabedatum();
+
                 break;
 
             case 2:
@@ -569,6 +605,9 @@ class Bibliothek {
                 else {list_of_zeitschriften[index_temp].SetAusleihdatum(jahr, monat, tag);}
                 list_of_zeitschriften[index_temp].SetRueckgabedatum(ausleihdauer);
 
+                list_of_zeitschriften[index_temp].ShowAusleihdatum();
+                list_of_zeitschriften[index_temp].ShowRueckgabedatum();
+
                 break;
 
             case 3:
@@ -586,6 +625,9 @@ class Bibliothek {
                 if (tag == 0){list_of_dvds[index_temp].SetAusleihdatum();}
                 else {list_of_dvds[index_temp].SetAusleihdatum(jahr, monat, tag);}
                 list_of_dvds[index_temp].SetRueckgabedatum(ausleihdauer);
+
+                list_of_dvds[index_temp].ShowAusleihdatum();
+                list_of_dvds[index_temp].ShowRueckgabedatum();
 
                 break;
             
