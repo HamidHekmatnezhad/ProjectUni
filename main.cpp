@@ -5,10 +5,16 @@ using namespace std;
 int main(){
     Bibliothek b;
     int eingabe=1;
-    unsigned int id, idx, ISBN, ausgabenummer, id_medium;
+    unsigned int id, ISBN, ausgabenummer, id_medium;
+    int idx;
     string name, titel, autor;
     unsigned int jahr, monat, tag, ausleihdauer;
     unsigned int stunde, minute, sekunde;
+
+    cout << "Importieren SaveData (ja:1/nein:0)? ";
+    cin >> eingabe;
+    if (eingabe) {b.LoadData();}
+    cout << endl << endl << endl;
 
     while(true){
         cout << "1. Benutzer" << endl;
@@ -17,7 +23,7 @@ int main(){
         cout << "4. Zurueckgeben" << endl;
         cout << "5. Ausgeliehene Medien anzeigen" << endl;
         cout << "6. ausgeliehene ueberfaellige Medien" << endl;
-        cout << "0. Beenden" << endl;
+        cout << "9. Beenden" << endl;
         
         cout << "Bitte waehlen Sie eine Option: ";
         cin >> eingabe;
@@ -28,9 +34,9 @@ int main(){
             case 1:
                 cout << "1. neue Benutzer hinzufuegen." << endl;
                 cout << "2. Benutzer loeschen." << endl;
-                cout << "3. ein Benutzer anzeigen." << endl;
+                cout << "3. Benutzer suchen." << endl;
                 cout << "4. alle Benutzer anzeigen." << endl;
-                cout << "0. zurueck." << endl;
+                cout << "9. zurueck." << endl;
 
                 cout << "Bitte waehlen Sie eine Option: ";
                 cin >> eingabe;
@@ -81,7 +87,7 @@ int main(){
                                     break;
                                 }
                                 cout << "Benutzer gefunden: " << endl;
-                                b.AnzeigenFuerEinBenutzer(idx);
+                                b.AnzeigenBenutzerMitIndex(idx);
                                 cout << endl;
                                 break;
 
@@ -91,11 +97,10 @@ int main(){
 
                         break;
                     case 4: // alle Benutzer anzeigen 
-                        cout << "alle Benutzer anzeigen: " << endl;
                         b.AnzeigenFuerAlleBenutzer();
                         break;
 
-                    case 0:
+                    case 9:
                         cout << "Zurueck..." << endl;
                         break;
                     default:
@@ -108,7 +113,7 @@ int main(){
                 cout << "2. Zeitschrift" << endl;
                 cout << "3. DVD" << endl;
                 cout << "4. alle Medien anzeigen" << endl;
-                cout << "0. zurueck" << endl;
+                cout << "9. zurueck" << endl;
 
                 cout << "Bitte waehlen Sie eine Option: ";
                 cin >> eingabe;
@@ -120,7 +125,7 @@ int main(){
                         cout << "2. Buch loeschen." << endl;
                         cout << "3. Buch suchen." << endl;
                         cout << "4. alle Buecher anzeigen." << endl;
-                        cout << "0. zurueck." << endl;
+                        cout << "9. zurueck." << endl;
 
                         cout << "Bitte waehlen Sie eine Option: ";
                         cin >> eingabe;
@@ -153,12 +158,11 @@ int main(){
                                 cout << "2. mit ISBN" << endl;
                                 cout << "3. mit Autor" << endl;
                                 cout << "4. mit ID" << endl;
-                                cout << "0. zurueck" << endl;
+                                cout << "9. zurueck" << endl;
                                 
                                 cout << "Bitte waehlen Sie eine Option: ";
                                 cin >> eingabe;
                                 cout << endl;
-                                break;
 
                                 switch(eingabe){
                                     case 1: // mit Titel 
@@ -197,7 +201,7 @@ int main(){
                                         cout << endl;
                                         break;
 
-                                    case 0: // zurueck 
+                                    case 9: // zurueck 
                                         cout << "Zurueck..." << endl;
                                         break;
 
@@ -205,14 +209,14 @@ int main(){
                                         cout << "Ungueltige Eingabe!" << endl;
                                         break;
                                 }
+                                break;
 
-                                
                             case 4: // alle Buecher anzeigen 
                                 cout << "alle Buecher anzeigen: " << endl;
                                 b.AnzeigenAllMedien(1);
                                 break;
 
-                            case 0: // zurueck
+                            case 9: // zurueck
                                 cout << "Zurueck..." << endl;
                                 break;
                             default:
@@ -226,7 +230,7 @@ int main(){
                     cout << "2. Zeitschrift loeschen." << endl;
                     cout << "3. Zeitschrift suchen." << endl;
                     cout << "4. alle Zeitschriften anzeigen." << endl;
-                    cout << "0. zurueck." << endl;
+                    cout << "9. zurueck." << endl;
 
                     cout << "Bitte waehlen Sie eine Option: ";
                     cin >> eingabe;
@@ -259,7 +263,7 @@ int main(){
                             cout << "1. mit Titel" << endl;
                             cout << "2. mit Ausgabenummer" << endl;
                             cout << "3. mit ID" << endl;
-                            cout << "0. zurueck" << endl;
+                            cout << "9. zurueck" << endl;
 
                             cout << "Bitte waehlen Sie eine Option: ";
                             cin >> eingabe;
@@ -292,7 +296,7 @@ int main(){
                                     cout << endl;
                                     break;
 
-                                case 0: // zurueck
+                                case 9: // zurueck
                                     cout << "Zurueck..." << endl;
                                     break;
                                 default:
@@ -306,7 +310,7 @@ int main(){
                             b.AnzeigenAllMedien(2);
                             break;
                             
-                        case 0: // zurueck
+                        case 9: // zurueck
                             cout << "Zurueck..." << endl;
                             break;
                         default:
@@ -320,7 +324,7 @@ int main(){
                         cout << "2. DVD loeschen." << endl;
                         cout << "3. DVD suchen." << endl;
                         cout << "4. alle DVDs anzeigen." << endl;
-                        cout << "0. zurueck." << endl;
+                        cout << "9. zurueck." << endl;
 
                         cout << "Bitte waehlen Sie eine Option: ";
                         cin >> eingabe;
@@ -361,7 +365,7 @@ int main(){
                             case 3: // DVD suchen  #
                                 cout << "1. mit Titel" << endl;
                                 cout << "2. mit ID" << endl;
-                                cout << "0. zurueck" << endl;
+                                cout << "9. zurueck" << endl;
 
                                 cout << "Bitte waehlen Sie eine Option: ";
                                 cin >> eingabe;
@@ -386,7 +390,7 @@ int main(){
                                         cout << endl;
                                         break;
                                     
-                                    case 0: // zurueck
+                                    case 9: // zurueck
                                         cout << "Zurueck..." << endl;
                                         break;
                                     default:
@@ -401,7 +405,7 @@ int main(){
                                 cout << endl;
                                 break;
      
-                            case 0: // zurueck
+                            case 9: // zurueck
                                 cout << "Zurueck..." << endl;
                                 break;
                             
@@ -416,7 +420,7 @@ int main(){
                         cout << "2. alle Zeitschriften anzeigen" << endl;
                         cout << "3. alle DVDs anzeigen" << endl;
                         cout << "4. alle Medien anzeigen" << endl;
-                        cout << "0. zurueck" << endl;
+                        cout << "9. zurueck" << endl;
 
                         cout << "Bitte waehlen Sie eine Option: ";
                         cin >> eingabe;
@@ -447,7 +451,7 @@ int main(){
                                 cout << endl;
                                 break;
 
-                            case 0: // zurueck
+                            case 9: // zurueck
                                 cout << "Zurueck..." << endl;
                                 break;
                             default:
@@ -456,7 +460,7 @@ int main(){
                             }
                         break;
 
-                    case 0: // zurueck
+                    case 9: // zurueck
                         cout << "Zurueck..." << endl;
                         break;
                     default:
@@ -485,7 +489,7 @@ int main(){
 
                 cout << "1. Ausleihdatum jetzt" << endl;
                 cout << "2. Ausleihdatum eingeben" << endl;
-                cout << "0. zurueck" << endl;
+                cout << "9. zurueck" << endl;
 
                 cout << "Bitte waehlen Sie eine Option: ";
                 cin >> eingabe;
@@ -529,7 +533,7 @@ int main(){
                         break;
 
 
-                    case 0: // zurueck
+                    case 9: // zurueck
                         cout << "Zurueck..." << endl;
                         break;
 
@@ -558,33 +562,33 @@ int main(){
                 cout << "2. Zeitschrift" << endl;
                 cout << "3. DVD" << endl;
                 cout << "4. alle Medien" << endl;
-                cout << "0. zurueck" << endl;
+                cout << "9. zurueck" << endl;
                 cout << "Bitte waehlen Sie eine Option: ";
                 cin >> eingabe;
                 cout << endl;
 
                 switch(eingabe){
                     case 1: // Buch 
-                    b.AnzeigenAllMedien(1);
+                    b.AnzeigenAusgelieheneMedien(1);
                     cout << endl;
                     break;
 
                     case 2: // Zeitschrift 
-                    b.AnzeigenAllMedien(2);
+                    b.AnzeigenAusgelieheneMedien(2);
                     cout << endl;
                     break;
 
                     case 3: // DVD 
-                    b.AnzeigenAllMedien(3);
+                    b.AnzeigenAusgelieheneMedien(3);
                     cout << endl;
                     break;
 
                     case 4: // alle Medien 
-                    b.AnzeigenAllMedien(0);
+                    b.AnzeigenAusgelieheneMedien(0);
                     cout << endl;
                     break;
 
-                    case 0: // zurueck
+                    case 9: // zurueck
                         cout << "Zurueck..." << endl;
                         break;
                         
@@ -599,7 +603,7 @@ int main(){
                 cout << "2. Zeitschrift" << endl;
                 cout << "3. DVD" << endl;
                 cout << "4. alle Medien" << endl;
-                cout << "0. zurueck" << endl;
+                cout << "9. zurueck" << endl;
                 cout << "Bitte waehlen Sie eine Option: ";
                 cin >> eingabe;
                 cout << endl;
@@ -625,7 +629,7 @@ int main(){
                     cout << endl;
                     break;
 
-                    case 0: // zurueck
+                    case 9: // zurueck
                         cout << "Zurueck..." << endl;
                         break;
 
@@ -635,17 +639,19 @@ int main(){
                 }
             break;
 
-            case 0:
+            case 9:
                 cout << "Programm wird beendet..." << endl;
                 return 0;
 
             default:
                 cout << "Ungueltige Eingabe!" << endl;
         }
+        
         cout << endl;
         cout << "Druecken Sie eine Taste um fortzufahren..." << endl;
         cin.ignore();
-        // cin.get();
+        cin.get();
+
         // system("cls");
         // system("clear");
     }

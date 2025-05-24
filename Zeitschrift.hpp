@@ -7,8 +7,8 @@ class Zeitschrift: public Medium {
 
     public:
         Zeitschrift() {}
-        Zeitschrift(string titel, unsigned int id, bool verfuegbar, unsigned int ausgaabe_nummer) : Medium(titel, id, verfuegbar) {
-            this->ausgaabe_nummer = ausgaabe_nummer;
+        Zeitschrift(string ttl, unsigned int idd, bool vrfgbr, unsigned int asgb_nm) : Medium(ttl, idd, vrfgbr) {
+            ausgaabe_nummer = asgb_nm;
         }
 
         ~Zeitschrift() {}
@@ -31,8 +31,8 @@ class Zeitschrift: public Medium {
             return ausgaabe_nummer;
         }
 
-        void SetAusgaabeNummer(unsigned int ausgaabe_nummer) {
-            this->ausgaabe_nummer = ausgaabe_nummer;
+        void SetAusgaabeNummer(unsigned int asgb_nm) {
+            ausgaabe_nummer = asgb_nm;
         }
 
 };

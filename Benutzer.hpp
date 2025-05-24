@@ -12,9 +12,9 @@ class Benutzer {
 
     public:
         Benutzer() {}
-        Benutzer(string name, unsigned int id) {
-            this->name = name;
-            this->id = id;
+        Benutzer(string nm, unsigned int idd) {
+            name = nm;
+            id = idd;
         }
 
         ~Benutzer() {}
@@ -63,12 +63,12 @@ class Benutzer {
             return index;
         }
 
-        void SetName(string name) {
-            this->name = name;
+        void SetName(string nm) {
+            name = nm;
         }
 
-        void SetId(unsigned int id) {
-            this->id = id;
+        void SetId(unsigned int idd) {
+            id = idd;
         }
         
         int GetMaxAusleihungen() {

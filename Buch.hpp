@@ -8,9 +8,9 @@ class Buch: public Medium {
 
     public:
         Buch() {}
-        Buch(string titel, unsigned int id, bool verfuegbar, string autor, unsigned int ISBN) : Medium(titel, id, verfuegbar) {
-            this->autor = autor;
-            this->ISBN = ISBN;
+        Buch(string ttl, unsigned int idd, bool vrfgbr, string atr, unsigned int IN) : Medium(ttl, idd, vrfgbr) {
+            autor = atr;
+            ISBN = IN;
         }
 
         ~Buch() {}
@@ -38,11 +38,11 @@ class Buch: public Medium {
             return ISBN;
         }
 
-        void SetAutor(string autor) {
-            this->autor = autor;
+        void SetAutor(string atr) {
+            autor = atr;
         }
         
-        void SetISBN(unsigned int ISBN) {
-            this->ISBN = ISBN;
+        void SetISBN(unsigned int IN) {
+            ISBN = IN;
         }
 };

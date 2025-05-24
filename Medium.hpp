@@ -18,10 +18,10 @@ class Medium {
 
         public:
         Medium() {}
-        Medium(string titel, unsigned int id, bool verfuegbar) {  
-            this->titel = titel;
-            this->id = id;
-            this->verfuegbar = verfuegbar;
+        Medium(string ttl, unsigned int idd, bool vrfgbr) {  
+            titel = ttl;
+            id = idd;
+            verfuegbar = vrfgbr;
         }
 
         ~Medium() {}
@@ -57,8 +57,7 @@ class Medium {
         void ShowAusleihdatum() {
             if (first_ausleihdatum) {
                 tm *tm = localtime(&ausleihdatum);
-                cout << "Ausleihdatum: " << tm->tm_mday << "." << tm->tm_mon + 1 << "." << tm->tm_year + 1900;
-                cout << "   " << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << endl;
+                cout << "Ausleihdatum: " << tm->tm_mday << "." << tm->tm_mon + 1 << "." << tm->tm_year + 1900 << endl;
             }
         }
         
@@ -70,21 +69,20 @@ class Medium {
         void ShowRueckgabedatum() {
             if (first_rueckgabedatum) {
                 tm *tm = localtime(&rueckgabedatum);
-                cout << "Rueckgabedatum: " << tm->tm_mday << "." << tm->tm_mon + 1 << "." << tm->tm_year + 1900;
-                cout << "   " << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << endl;
+                cout << "Rueckgabedatum: " << tm->tm_mday << "." << tm->tm_mon + 1 << "." << tm->tm_year + 1900 << endl;
             }
         }
         
-        void SetTitel(string titel) {
-            this->titel = titel;
+        void SetTitel(string ttl) {
+            titel = ttl;
         }
         
-        void SetId(unsigned int id) {
-            this->id = id;
+        void SetId(unsigned int idd) {
+            id = idd;
         }
 
-        void SetVerfuegbar(bool verfuegbar) {
-            this->verfuegbar = verfuegbar;
+        void SetVerfuegbar(bool vfgbr) {
+            verfuegbar = vfgbr;
         }
 
         void SetAusleihdatum() { 
@@ -103,6 +101,7 @@ class Medium {
             datetime_a.tm_sec = sekunde;
 
             ausleihdatum = mktime(&datetime_a);
+            first_ausleihdatum = true;
         }
         
         void SetRueckgabedatum(unsigned int tage) {

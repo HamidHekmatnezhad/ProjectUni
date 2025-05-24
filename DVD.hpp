@@ -13,9 +13,7 @@ class DVD: public Medium {
 
     public:
         DVD() {}
-        DVD(string titel, unsigned int id, bool verfuegbar) : Medium(titel, id, verfuegbar) {
-            this->Abspieldauer = Abspieldauer;
-        }
+        DVD(string ttl, unsigned int idd, bool vrfgbr) : Medium(ttl, idd, vrfgbr) {}
 
         ~DVD() {}
         
@@ -37,10 +35,10 @@ class DVD: public Medium {
             return Abspieldauer;
         }
 
-        void SetAbspieldauer(unsigned int stunde, unsigned int minute, unsigned int sekunde) {
-            this->Abspieldauer.stunde = stunde;
-            this->Abspieldauer.minute = minute;
-            this->Abspieldauer.sekunde = sekunde;
+        void SetAbspieldauer(unsigned int stnd, unsigned int mnt, unsigned int sknd) {
+            Abspieldauer.stunde = stnd;
+            Abspieldauer.minute = mnt;
+            Abspieldauer.sekunde = sknd;
         }
 
 };

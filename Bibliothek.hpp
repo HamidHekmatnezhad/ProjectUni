@@ -3,11 +3,14 @@
 #include "DVD.hpp"
 #include "Benutzer.hpp"
 
+#include <fstream>
+#include <sstream>
+
 #define MAX_ANZAHL_BUCH 50
 #define MAX_ANZAHL_ZEIT 50
 #define MAX_ANZAHL_DVD  50
 #define MAX_ANZAHL_BENUTZER 100 
-#define MAX_ANZAHL_AUSGELIEHEN 150
+#define MAX_ANZAHL_AUSGELIEHEN 400
 
 using namespace std;
 
@@ -103,7 +106,7 @@ class Bibliothek {
             switch(id/100){
 
                 case 1:
-                    cout << "|\tBUCH:" << endl;
+                    cout << "------------+  Buecher  +------------" << endl;
                     for (int i = 0; i < index_buch; i++) {
                         if (list_of_buecher[i].GetId() == id) {
                             list_of_buecher[i].Anzeigen();
@@ -113,7 +116,7 @@ class Bibliothek {
                     break;
                 
                 case 2:
-                    cout << "|\tZEITSCHRIFT:" << endl;
+                    cout << "------------+  ZEITSCHRIFT  +------------" << endl;
                     for (int i = 0; i < index_zeitschrift; i++) {
                         if (list_of_zeitschriften[i].GetId() == id) {
                             list_of_zeitschriften[i].Anzeigen();
@@ -123,7 +126,7 @@ class Bibliothek {
                     break;
 
                 case 3:
-                    cout << "|\tDVD:" << endl;
+                    cout << "------------+  DVDs  +------------" << endl;
                     for (int i = 0; i < index_dvd; i++) {
                         if (list_of_dvds[i].GetId() == id) {
                             list_of_dvds[i].Anzeigen();
@@ -132,7 +135,7 @@ class Bibliothek {
                     }
 
                 default:
-                    cout << "|\t\tUnbekannter Typ oder not found!" << endl;
+                    cout << "\t\tUnbekannter Typ oder not found!" << endl;
                     break;
             }
             cout << "+-------------------------------------------+" << endl;
@@ -196,7 +199,7 @@ class Bibliothek {
             cout << "Benutzer hinzugefügt: " << name << "  mit ID: " << list_of_benutzer[index_benutzer-1].GetId() << endl;
         }
         
-        unsigned int SearchBenutzerMitName(string name) {
+        int SearchBenutzerMitName(string name) {
             for (int i = 0; i < index_benutzer; i++) {
                 if (list_of_benutzer[i].GetName() == name) {
                     return i; // return index
@@ -205,7 +208,7 @@ class Bibliothek {
             return -1;
         } 
 
-        unsigned int SearchBenutzerMitId(unsigned int id) {
+        int SearchBenutzerMitId(unsigned int id) {
             for (int i = 0; i < index_benutzer; i++) {
                 if (list_of_benutzer[i].GetId() == id) {
                     return i; // return index
@@ -215,7 +218,7 @@ class Bibliothek {
         }
         
         void AnzeigenFuerEinBenutzer(unsigned int id){
-            int index = SearchBuchMitId(id);
+            int index = SearchBenutzerMitId(id);
             if (index == -1) {
                 cout << "Benutzer nicht gefunden!" << endl;
             }
@@ -236,26 +239,28 @@ class Bibliothek {
         }
 
         void AnzeigenFuerAlleBenutzer() {  
-            cout << "Alle Benutzer: " << endl;
+            cout << "\tAlle Benutzer: " << endl;
+            cout << "+-------------------------------------------+" << endl;
             for (int i = 0; i < index_benutzer; i++) {
                 cout << "\tBenutzer ID: " << list_of_benutzer[i].GetId() << endl;
                 cout << "\tBenutzer Name: " << list_of_benutzer[i].GetName() << endl;
                 cout << "\tAusgeliehene Medien: " << endl;
                 if (list_of_benutzer[i].GetIndex() == 0) {
                     cout << "\t\tKeine ausgeliehenen Medien!" << endl;
-                    return;
                 }
-                cout << "\tAusgeliehene Medien: " << endl;
+                else {
+                    cout << "\tAusgeliehene Medien: " << endl;
 
-                for (int j = 0; j < list_of_benutzer[i].GetIndex(); j++) {
-                    AnzeigenMedienMitId(list_of_benutzer[i].GetListeAusgeliehenerBuecher()[j]);
+                    for (int j = 0; j < list_of_benutzer[i].GetIndex(); j++) {
+                        AnzeigenMedienMitId(list_of_benutzer[i].GetListeAusgeliehenerBuecher()[j]);
+                    }
                 }
-                cout << endl;
+                cout << "+-------------------------------------------+" << endl;
             }
         }
         
         void BenutzerLoeschen(unsigned int id) {
-            unsigned int temp_idx = SearchBuchMitId(id);
+            unsigned int temp_idx = SearchBenutzerMitId(id);
             if (temp_idx == -1) {
                 cout << "Benutzer nicht gefunden!" << endl;
                 return;
@@ -267,13 +272,17 @@ class Bibliothek {
             cout << "Benutzer gelöscht: " << id << endl;
         }
  
-        unsigned int GetBenutzerIndexMitId(unsigned int id) {
-            for (int i = 0; i < index_benutzer; i++) {
-                if (list_of_benutzer[i].GetId() == id) {
-                    return i;
-                }
+        void AnzeigenBenutzerMitIndex(unsigned int index) {
+            if (index == -1) {
+                cout << "Benutzer nicht gefunden!" << endl;
+                return;
+            } 
+            else {
+                cout << "+-------------------------------------------+" << endl;            
+                cout << "Benutzer gefunden: \n";
+                list_of_benutzer[index].Anzeigen();
+                cout << "+-------------------------------------------+" << endl;            
             }
-            return -1;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +323,7 @@ class Bibliothek {
             }
         }
 
-        unsigned int SearchBuchMitId(unsigned int id) {
+        int SearchBuchMitId(unsigned int id) {
             for (int i = 0; i < index_buch; i++) {
                 if (list_of_buecher[i].GetId() == id) {
                     return i;
@@ -377,6 +386,14 @@ class Bibliothek {
             cout << "Buch gelöscht! " << endl;
         }
 
+        int SearchBuchMitName(string name) {
+            for (int i = 0; i < index_buch; i++) {
+                if (list_of_buecher[i].GetTitel() == name) {
+                    return i;
+                }
+            }
+            return -1;
+        }
         ////////////////////////////////////////////////////////////////////////////////
         
 
@@ -409,7 +426,7 @@ class Bibliothek {
             }
         }
 
-        unsigned int SearchZeitschriftMitId(unsigned int id) {
+        int SearchZeitschriftMitId(unsigned int id) {
             for (int i = 0; i < index_zeitschrift; i++) {
                 if (list_of_zeitschriften[i].GetId() == id) {
                     return i;
@@ -457,9 +474,18 @@ class Bibliothek {
             cout << "Zeitschrift gelöscht! " << endl;
         }
 
-        unsigned int GetZeitschriftIndexMitId(unsigned int id) {
+        int GetZeitschriftIndexMitId(unsigned int id) {
             for (int i = 0; i < index_zeitschrift; i++) {
                 if (list_of_zeitschriften[i].GetId() == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        
+        int SearchZeitschriftMitName(string name) {
+            for (int i = 0; i < index_zeitschrift; i++) {
+                if (list_of_zeitschriften[i].GetTitel() == name) {
                     return i;
                 }
             }
@@ -504,7 +530,7 @@ class Bibliothek {
             }
         }
 
-        unsigned int SearchDVDMitId(unsigned int id) {
+        int SearchDVDMitId(unsigned int id) {
             for (int i = 0; i < index_dvd; i++) {
                 if (list_of_dvds[i].GetId() == id) {
                     return i;
@@ -539,7 +565,7 @@ class Bibliothek {
             cout << "DVD gelöscht! " << endl;
         }
 
-        unsigned int GetDVDIndexMitId(unsigned int id) {
+        int GetDVDIndexMitId(unsigned int id) {
             for (int i = 0; i < index_dvd; i++) {
                 if (list_of_dvds[i].GetId() == id) {
                     return i;
@@ -547,6 +573,16 @@ class Bibliothek {
             }
             return -1;
         }
+        
+        int SearchDVDMitName(string name) {
+            for (int i = 0; i < index_dvd; i++) {
+                if (list_of_dvds[i].GetTitel() == name) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+                
         ///////////////////////////////////////////////////////////////////////////////// 
         
 
@@ -554,7 +590,7 @@ class Bibliothek {
         void Ausleihen(unsigned int benutzer_id, unsigned int mediun_id, unsigned int ausleihdauer, int tag=0, int monat=0, int jahr=0) {
             
             
-            int index_benutzer = GetBenutzerIndexMitId(benutzer_id);
+            int index_benutzer = SearchBenutzerMitId(benutzer_id);
             if (index_benutzer == -1) {
                 cout << "Benutzer mit ID " << benutzer_id << " nicht gefunden!" << endl;
                 return;
@@ -645,7 +681,7 @@ class Bibliothek {
         }
 
         void Zurueckgeben(unsigned int benutzer_id, unsigned int mediun_id) {
-            int index_benutzer = GetBenutzerIndexMitId(benutzer_id);
+            int index_benutzer = SearchBenutzerMitId(benutzer_id);
             if (index_benutzer == -1) {
                 cout << "Benutzer mit ID " << benutzer_id << " nicht gefunden!" << endl;
                 return;
@@ -788,4 +824,181 @@ class Bibliothek {
         } 
         
         //////////////////////////////////////////////////////////////////////////////////
+        
+        void LoadData() {
+            // load data from file
+            ifstream file("data.txt");
+            if (!file.is_open()) {
+                cout << "Datei konnte nicht geöffnet werden!" << endl;
+                return;
+            }
+            
+            string line, s0, s1, s2, s3, s4, s5;
+            unsigned int i1, i2, i3;
+            while (getline(file, line)) {
+                if (line.empty()) continue; // skip empty lines
+
+                stringstream ss(line);
+                getline(ss, s0, '-');
+                char type = s0[0];
+
+                switch (type) {
+                    case 'u': { // Benutzer
+                        getline(ss, s1, '-');
+
+                        BenutzerHinzufuegen(s1);
+                        break;
+                    }
+                    case 'b': { // Buch
+                        getline(ss, s1, '-');
+                        getline(ss, s2, '-');
+                        getline(ss, s3, '-');
+                        
+                        i1 = stoi(s3);
+
+                        HinzufuegenBuch(s1, s2, i1, true);
+                        break;
+                    }
+                    case 'z': { // Zeitschrift
+                        getline(ss, s1, '-');
+                        getline(ss, s2, '-');
+                        
+                        i1 = stoi(s2);
+
+                        HinzufuegenZeitschrift(s1, i1, true);
+                        break;
+                    }
+                    case 'd': { // DVD
+                        getline(ss, s1, '-');
+                        getline(ss, s2, '-');
+                        getline(ss, s3, '-');
+                        getline(ss, s4, '-');
+                        
+                        i1 = stoi(s2);
+                        i2 = stoi(s3);
+                        i3 = stoi(s4);
+
+                        HinzufuegenDVD(s1, i1, i2, i3, true);
+                        break;
+                    }
+                    case 'a': { // Ausleihen - datum now
+                        getline(ss, s1, '-'); // benutzer name
+                        i1 = SearchBenutzerMitName(s1); // index
+                        if (i1 == -1) {continue;}
+
+                        getline(ss, s2, '-');
+                        char t = s2[0];
+                        
+                        if (t == 'b') { // buch
+                            getline(ss, s3, '-');
+                            i2 = SearchBuchMitName(s3);
+                            if (i2 == -1) {continue;}
+
+                            getline(ss, s4, '-');
+                            i3 = stoi(s4);
+
+                            Ausleihen(list_of_benutzer[i1].GetId(), list_of_buecher[i2].GetId(), i3);
+                        }
+                        
+                        else if(t == 'z') { // Zeitscshrift
+                            getline(ss, s3, '-');
+                            i2 = SearchZeitschriftMitName(s3);
+                            if (i2 == -1) {continue;}
+
+                            getline(ss, s4, '-');
+                            i3 = stoi(s4);
+
+                            Ausleihen(list_of_benutzer[i1].GetId(), list_of_zeitschriften[i2].GetId(), i3);
+                        }
+                        else if(t == 'd') { // DVD
+                            getline(ss, s3, '-');
+                            i2 = SearchDVDMitName(s3);  
+                            if (i2 == -1) {continue;}
+
+                            getline(ss, s4, '-');
+                            i3 = stoi(s4);
+
+                            Ausleihen(list_of_benutzer[i1].GetId(), list_of_dvds[i2].GetId(), i3);
+                        }
+                        break;
+                    }
+                    case 'c':{ // Ausleihen - datum custom
+                        int i4, i5, i6;
+                        string s6, s7;
+
+                        getline(ss, s1, '-');
+                        i1 = SearchBenutzerMitName(s1);
+                        if (i1 == -1) {continue;}
+                        
+                        getline(ss, s2, '-');
+                        char t = s2[0];
+
+                        if (t == 'b') {
+                            getline(ss, s3, '-'); // buch name
+                            i2 = SearchBuchMitName(s3);
+                            if (i2 == -1) {continue;}
+
+                            getline(ss, s4, '-'); // ausleihdauer
+                            i3 = stoi(s4);
+
+                            getline(ss, s5, '-'); // tag
+                            i4 = stoi(s5);
+
+                            getline(ss, s6, '-'); // monate
+                            i5 = stoi(s6);
+
+                            getline(ss, s7, '-'); // jahr
+                            i6 = stoi(s7);
+
+                            Ausleihen(list_of_benutzer[i1].GetId(), list_of_buecher[i2].GetId(), i3, i4, i5, i6);
+                        }
+                        else if (t == 'z') {
+                            getline(ss, s3, '-'); // Zeitschrift name
+                            i2 = SearchZeitschriftMitName(s3);
+                            if (i2 == -1) {continue;}
+
+                            getline(ss, s4, '-'); // ausleihdauer
+                            i3 = stoi(s4);
+
+                            getline(ss, s5, '-'); // tag
+                            i4 = stoi(s5);
+
+                            getline(ss, s6, '-'); // monate
+                            i5 = stoi(s6);
+
+                            getline(ss, s7, '-'); // jahr
+                            i6 = stoi(s7);
+
+                            Ausleihen(list_of_benutzer[i1].GetId(), list_of_zeitschriften[i2].GetId(), i3, i4, i5, i6);
+                        }
+                        else if (t == 'd') {
+                            getline(ss, s3, '-'); // DVD name
+                            i2 = SearchDVDMitName(s3);
+                            if (i2 == -1) {continue;}
+
+                            getline(ss, s4, '-'); // ausleihdauer
+                            i3 = stoi(s4);
+
+                            getline(ss, s5, '-'); // tag
+                            i4 = stoi(s5);
+
+                            getline(ss, s6, '-'); // monate
+                            i5 = stoi(s6);
+
+                            getline(ss, s7, '-'); // jahr
+                            i6 = stoi(s7);
+
+                            Ausleihen(list_of_benutzer[i1].GetId(), list_of_dvds[i2].GetId(), i3, i4, i5, i6);
+                        }
+                        break;
+                    }
+                    default:
+                        cout << "Unbekannter Typ in der Datei: " << type << endl;
+                        break;
+            }
+
+        }
+        file.close();
+    }
+
 };
