@@ -999,6 +999,10 @@ class Bibliothek {
 
         }
         file.close();
-    }
 
+        cout << endl;
+        cout << "\t\t+-----------------------------------+" << endl;
+        cout << "\t\t| Daten wurden erfolgreich geladen! |" << endl;
+        cout << "\t\t+-----------------------------------+" << endl;
+    }
 };

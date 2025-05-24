@@ -14,7 +14,7 @@ int main(){
     cout << "Importieren SaveData (ja:1/nein:0)? ";
     cin >> eingabe;
     if (eingabe) {b.LoadData();}
-    cout << endl << endl << endl;
+    cout << endl;
 
     while(true){
         cout << "1. Benutzer" << endl;
