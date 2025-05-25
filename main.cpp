@@ -1,6 +1,17 @@
 #include "Bibliothek.hpp"
 using namespace std;
 
+bool SafeInputInt(int& eingabe) {
+    cin >> eingabe;
+
+    if (cin.fail()) {
+        cin.clear(); 
+        cin.ignore(10000, '\n'); 
+        return false;
+    }
+    return true;
+}
+
 
 int main(){
     Bibliothek b;
@@ -12,7 +23,10 @@ int main(){
     unsigned int stunde, minute, sekunde;
 
     cout << "Importieren SaveData (ja:1/nein:0)? ";
-    cin >> eingabe;
+    if (!SafeInputInt(eingabe)) {
+    cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl; 
+    }
+
     if (eingabe) {b.LoadData();}
     cout << endl;
 
@@ -26,7 +40,10 @@ int main(){
         cout << "9. Beenden" << endl;
         
         cout << "Bitte waehlen Sie eine Option: ";
-        cin >> eingabe;
+        if (!SafeInputInt(eingabe)) {
+        cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+        continue; 
+        }
         cout << endl;
 
 
@@ -39,7 +56,10 @@ int main(){
                 cout << "9. zurueck." << endl;
 
                 cout << "Bitte waehlen Sie eine Option: ";
-                cin >> eingabe;
+                if (!SafeInputInt(eingabe)) {
+                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                continue; 
+                }
                 cout << endl;
 
                 switch(eingabe){
@@ -63,7 +83,11 @@ int main(){
                         cout << "1. mit ID" << endl;
                         cout << "2. mit Name" << endl;
                         cout << "Bitte waehlen Sie eine Option: ";
-                        cin >> eingabe;
+                        
+                        if (!SafeInputInt(eingabe)) {
+                        cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                        continue; 
+                        }
                         cout << endl;
 
                         switch(eingabe){
@@ -116,7 +140,10 @@ int main(){
                 cout << "9. zurueck" << endl;
 
                 cout << "Bitte waehlen Sie eine Option: ";
-                cin >> eingabe;
+                if (!SafeInputInt(eingabe)) {
+                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                continue; 
+                }
                 cout << endl;
 
                 switch(eingabe){
@@ -128,7 +155,10 @@ int main(){
                         cout << "9. zurueck." << endl;
 
                         cout << "Bitte waehlen Sie eine Option: ";
-                        cin >> eingabe;
+                        if (!SafeInputInt(eingabe)) {
+                        cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                        continue; 
+                        }
                         cout << endl;
 
                         switch(eingabe){
@@ -161,7 +191,10 @@ int main(){
                                 cout << "9. zurueck" << endl;
                                 
                                 cout << "Bitte waehlen Sie eine Option: ";
-                                cin >> eingabe;
+                                if (!SafeInputInt(eingabe)) {
+                                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                                continue; 
+                                }
                                 cout << endl;
 
                                 switch(eingabe){
@@ -233,7 +266,10 @@ int main(){
                     cout << "9. zurueck." << endl;
 
                     cout << "Bitte waehlen Sie eine Option: ";
-                    cin >> eingabe;
+                    if (!SafeInputInt(eingabe)) {
+                    cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                    continue; 
+                    }
                     cout << endl;
 
                     switch(eingabe){
@@ -266,7 +302,10 @@ int main(){
                             cout << "9. zurueck" << endl;
 
                             cout << "Bitte waehlen Sie eine Option: ";
-                            cin >> eingabe;
+                            if (!SafeInputInt(eingabe)) {
+                            cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                            continue; 
+                            }
                             cout << endl;
 
                             switch(eingabe){
@@ -327,7 +366,10 @@ int main(){
                         cout << "9. zurueck." << endl;
 
                         cout << "Bitte waehlen Sie eine Option: ";
-                        cin >> eingabe;
+                        if (!SafeInputInt(eingabe)) {
+                        cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                        continue; 
+                        }
                         cout << endl;
                         
                         switch(eingabe){
@@ -368,7 +410,10 @@ int main(){
                                 cout << "9. zurueck" << endl;
 
                                 cout << "Bitte waehlen Sie eine Option: ";
-                                cin >> eingabe;
+                                if (!SafeInputInt(eingabe)) {
+                                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                                continue; 
+                                }
                                 cout << endl;
 
                                 switch(eingabe){
@@ -423,7 +468,10 @@ int main(){
                         cout << "9. zurueck" << endl;
 
                         cout << "Bitte waehlen Sie eine Option: ";
-                        cin >> eingabe;
+                        if (!SafeInputInt(eingabe)) {
+                        cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                        continue; 
+                        }
                         cout << endl;
 
                         switch(eingabe){
@@ -492,7 +540,10 @@ int main(){
                 cout << "9. zurueck" << endl;
 
                 cout << "Bitte waehlen Sie eine Option: ";
-                cin >> eingabe;
+                if (!SafeInputInt(eingabe)) {
+                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                continue; 
+                }
                 cout << endl;
 
                 switch(eingabe){
@@ -564,7 +615,10 @@ int main(){
                 cout << "4. alle Medien" << endl;
                 cout << "9. zurueck" << endl;
                 cout << "Bitte waehlen Sie eine Option: ";
-                cin >> eingabe;
+                if (!SafeInputInt(eingabe)) {
+                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                continue; 
+                }
                 cout << endl;
 
                 switch(eingabe){
@@ -605,7 +659,10 @@ int main(){
                 cout << "4. alle Medien" << endl;
                 cout << "9. zurueck" << endl;
                 cout << "Bitte waehlen Sie eine Option: ";
-                cin >> eingabe;
+                if (!SafeInputInt(eingabe)) {
+                cout << "\n\n\t----------   Ungueltige Eingabe! Nur Zahlen erlaubt.   ----------\n\n" << endl;
+                continue; 
+                }
                 cout << endl;
 
                 switch(eingabe){
